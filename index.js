@@ -3,7 +3,7 @@ var fs = require('fs');
 
 const PORT=8080;
 
-fs.eadFile('./Serverliste/index.html', function (err, html) {
+fs.readFile('./Serverliste/index.html', function (err, html) {
     if(err) throw err;
 
     http.createServer(function(request, response) {

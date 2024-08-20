@@ -4,7 +4,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        ::-webkit-scrollbar {
+            width: 20px;
+        }
+        ::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #9b9b9b;
+            border-radius: 20px;
+            border: 8px solid transparent;
+            background-clip: content-box;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #8a8a8a;
+            cursor: pointer;
+        }
+        body {
+            background: #1c1c1c;
+        }
+        .container h1 {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 5%;
+            color: #ebebeb;
+            font-size: 3rem;
+        }
+        .container h3 {
+            position: absolute;
+            left: 3%;
+            color: #ebebeb;
+            top: 7rem;
+            font-size: 2rem;
+        }
+        .container .inputs {
+            position: absolute;
+            right: 3%;
+            height: 2.5rem;
+            top: 7rem;
+        }
+        .container .inputs input {
+            height: 2.5rem;
+            width: 13rem;
+            border: solid #3a3a3a 2px;
+            top: 50%;
+            transform: translateY(-12%);
+            border-radius: 3px;
+            background: #1c1c1c;
+            color: #fff;
+            padding: 15px;
+            font-weight: 500;
+            outline: none;
+        }
+        .container .inputs .Search {
+            width: 2.5rem;
+            height: 2.5rem;
+            margin-left: -2px;
+            border: solid #3a3a3a 2px;
+            background: #1c1c1c;
+            border-radius: 3px;
+            color: #fff;
+        }
+        .container .createGame {
+            position: -webkit-sticky;
+            position: fixed;
+            right: 15px;
+            bottom: 25px;
+            z-index: 99;
+            border: solid #3a3a3a 2px;
+            width: 4rem;
+            height: 4rem;
+            border-radius: 3px;
+            color: #fff;
+            font-weight: 800;
+            font-size: 15px;
+            background: #1c1c1c;
+            cursor: pointer;
+        }
+        .container table{
+            position: absolute;
+            border-collapse: separate;
+            border-spacing: 0.2em;
+            border-width: thin 0 0 thin;
+            margin: 0 0 1em;
+            table-layout: auto;
+            max-width: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 10rem;
+            color: #fff;
+            background: #3a3a3a;
+            width: 94%;
+            border-radius: 3px;
+        }
+        .container table tr {
+            background: #1c1c1c;
+        }
+        .container table tr:first-child:hover {
+            background: #1c1c1c;
+            cursor: default;
+        }
+        .container table tr:hover{
+            background: #313131;
+            cursor: pointer;
+        }
+        .container table .serverListeHeader {
+            font-size: 25px;
+        }
+        .container table .serverListe {
+            font-size: 20px;
+        }
+        .container table .serverNameClass {
+            text-align: left;
+            padding-left: 10px;
+        }
+        .container table .serverName {
+            width: auto;
+        }
+        .conteiner table .serverCode {
+            width: 7%;
+        }
+        .container table .serverPassword {
+            width: 9%;
+            /*background: #df06cd;*/
+        }
+        .container .Locked {
+            padding-top: 0.35em;
+        }
+        .container table .serverPing {
+            width: 5%;
+            /*background: #0099f1;*/
+        }
+        .container table .serverCountry {
+            width: 15%;
+        }
+        .container table .serverStatus {
+            width: 10%;
+            /*background: #f30000;*/
+            background: #252525;
+        }
+    </style>
     <title>Pong</title>
 </head>
 <body>
@@ -35,6 +183,137 @@
         <button id="createButton" class="createGame" onclick="CreateGame()"><span class="material-symbols-outlined">add</span></button>
         <div class="space"></div>
     </div>
-    <script src="createGame.js"></script>
+    <script>
+        let createGame = false;
+
+        const hintergrund = document.createElement('div');
+
+        function CreateGame() {
+            if(createGame == false) {
+                const button = document.getElementById('createButton');
+                button.style.boxShadow = "0 0 5px #3a3a3a";
+
+                hintergrund.style.background = "#252525";
+                hintergrund.style.width = "20rem";
+                hintergrund.style.height = "25rem";
+                hintergrund.style.position = "fixed";
+                hintergrund.style.borderRadius = "3px";
+                hintergrund.style.border = "solid #3a3a3a 2px"
+                hintergrund.style.bottom = "100px";
+                hintergrund.style.right = "5px";
+                hintergrund.id = "createGameScreen";
+                hintergrund.style.textAlign = "center";
+                hintergrund.style.boxShadow = "0 0 5px #3a3a3a";
+
+                const closeIcon = document.createElement('span');
+                closeIcon.style.position = "relative"
+                closeIcon.className = "material-symbols-outlined";
+                closeIcon.textContent = "close";
+                closeIcon.style.width = "100%";
+                closeIcon.style.height = "100%";
+
+                const closeButton = document.createElement('button');
+                closeButton.style.position = "absolute";
+                closeButton.className = "closeButton";
+                closeButton.style.background = "#252525";
+                closeButton.style.border = "solid #3a3a3a 2px";
+                closeButton.style.borderRadius = "3px"
+                closeButton.style.width = "1.75rem";
+                closeButton.style.height = "1.75rem";
+                closeButton.style.top = "5px";
+                closeButton.style.right = "5px";
+                closeButton.style.color = "#fff";
+                closeButton.style.cursor = "pointer";
+                closeButton.onclick = function CloseScreen() {
+                    hintergrund.remove();
+                    button.style.boxShadow = "0 0 0 0";
+                    createGame = false;
+                };
+
+                const text1 = document.createElement('h1');
+                text1.textContent = "Create Game";
+                text1.style.width = "100%"
+                text1.style.position = "absolute";
+                text1.style.top = "25px"
+                text1.style.left = "50%";
+                text1.style.transform = "translateX(-50%)";
+                text1.style.fontSize = "20px";
+
+                const text2 = document.createElement('h3');
+                text2.textContent = "Server Name *";
+                text2.style.fontSize = "15px"
+                text2.style.left = "10%";
+
+                const nameInput = document.createElement('input');
+                nameInput.style.position = "absolute";
+                nameInput.style.top = "35%";
+                nameInput.style.left = "50%";
+                nameInput.style.transform = "translateX(-50%)";
+                nameInput.style.width = "80%";
+                nameInput.style.height = "35px";
+                nameInput.style.background = "#252525";
+                nameInput.style.border = "solid #3a3a3a 2px";
+                nameInput.style.borderRadius = "3px";
+                nameInput.style.outline = "none";
+                nameInput.style.paddingLeft = "15px";
+                nameInput.style.color = "#fff";
+                nameInput.style.fontWeight = "500";
+                nameInput.placeholder = "Server Name *";
+                nameInput.required = "true";
+                nameInput.maxLength = "25";
+
+                const text3 = document.createElement('h3');
+                text3.textContent = "Server Password";
+                text3.style.fontSize = "15px";
+                text3.style.left = "10%";
+                text3.style.top = "50%";
+
+                const passwordInput = document.createElement('input');
+                passwordInput.type = "password";
+                passwordInput.style.position = "absolute";
+                passwordInput.style.top = "57%";
+                passwordInput.style.left = "50%";
+                passwordInput.style.transform = "translateX(-50%)";
+                passwordInput.style.width = "80%";
+                passwordInput.style.height = "35px";
+                passwordInput.style.background = "#252525";
+                passwordInput.style.border = "solid #3a3a3a 2px";
+                passwordInput.style.borderRadius = "3px";
+                passwordInput.style.outline = "none";
+                passwordInput.style.paddingLeft = "15px";
+                passwordInput.style.color = "#fff";
+                passwordInput.style.fontWeight = "500";
+                passwordInput.placeholder = "Server Password";
+
+                const createButton = document.createElement('button');
+                createButton.textContent = "Create Game";
+                createButton.style.position = "absolute";
+                createButton.style.width = "50%";
+                createButton.style.height = "40px"
+                createButton.style.outline = "none";
+                createButton.style.border = "solid #3a3a3a 2px";
+                createButton.style.borderRadius = "3px";
+                createButton.style.background = "#252525";
+                createButton.style.bottom = "50px";
+                createButton.style.left = "50%";
+                createButton.style.transform = "translateX(-50%)";
+                createButton.style.color = "#fff";
+                createButton.style.cursor = "pointer";
+
+
+                hintergrund.appendChild(closeButton);
+                hintergrund.appendChild(text1);
+                hintergrund.appendChild(text2);
+                hintergrund.appendChild(text3);
+                hintergrund.appendChild(nameInput);
+                hintergrund.appendChild(passwordInput);
+                hintergrund.appendChild(createButton);
+                closeButton.appendChild(closeIcon);
+
+                document.getElementById('container').appendChild(hintergrund);
+                createGame = true;
+            }
+        }
+    </script>
 </body>
 </html>
