@@ -1,19 +1,12 @@
-var http = require('http');
-var fs = require('fs');
+const express = require('express');
+const app = express();
+const path = require('path');
+const port = 8080;
 
-const PORT=8080;
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, "./Serverliste/index.html"));
+})
 
-fs.readFile('./Serverliste/index.html', function (err, html) {
-    if(err) throw err;
-
-    const server = http.createServer((request, response) => {
-        response.writeHeader(200, {"Content-Type": "text/html"});
-        response.write(html);
-        response.end();
-        console.log("[Server]: Server erfollgreich erstellt!");
-    }).listen(PORT);
-
-    server.listen(PORT, "127.0.0.1/test", () => {
-        console.log("Test bestanden!");
-    })
-});
+app.listen(port, () => {
+    console.log(`Website is on port ${port}`);
+})
