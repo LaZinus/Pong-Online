@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+::-webkit-scrollbar {
+    width: 20px;
+}
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #9b9b9b;
+    border-radius: 20px;
+    border: 8px solid transparent;
+    background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover {
+    background-color: #8a8a8a;
+    cursor: pointer;
+}
+body {
+    background: #1c1c1c;
+}
+.container h1 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 5%;
+    color: #ebebeb;
+    font-size: 3rem;
+}
+.container h3 {
+    position: absolute;
+    left: 3%;
+    color: #ebebeb;
+    top: 7rem;
+    font-size: 2rem;
+}
+.container .inputs {
+    position: absolute;
+    right: 3%;
+    height: 2.5rem;
+    top: 7rem;
+}
+.container .inputs input {
+    height: 2.5rem;
+    width: 13rem;
+    border: solid #3a3a3a 2px;
+    top: 50%;
+    transform: translateY(-12%);
+    border-radius: 3px;
+    background: #1c1c1c;
+    color: #fff;
+    padding: 15px;
+    font-weight: 500;
+    outline: none;
+}
+.container .inputs .Search {
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-left: -2px;
+    border: solid #3a3a3a 2px;
+    background: #1c1c1c;
+    border-radius: 3px;
+    color: #fff;
+}
+.container .createGame {
+    position: -webkit-sticky;
+    position: fixed;
+    right: 15px;
+    bottom: 25px;
+    z-index: 99;
+    border: solid #3a3a3a 2px;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 3px;
+    color: #fff;
+    font-weight: 800;
+    font-size: 15px;
+    background: #1c1c1c;
+    cursor: pointer;
+}
+.container table{
+    position: absolute;
+    border-collapse: separate;
+    border-spacing: 0.2em;
+    border-width: thin 0 0 thin;
+    margin: 0 0 1em;
+    table-layout: auto;
+    max-width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 10rem;
+    color: #fff;
+    background: #3a3a3a;
+    width: 94%;
+    border-radius: 3px;
+}
+.container table tr {
+    background: #1c1c1c;
+}
+.container table tr:first-child:hover {
+    background: #1c1c1c;
+    cursor: default;
+}
+.container table tr:hover{
+    background: #313131;
+    cursor: pointer;
+}
+.container table .serverListeHeader {
+    font-size: 25px;
+}
+.container table .serverListe {
+    font-size: 20px;
+}
+.container table .serverNameClass {
+    text-align: left;
+    padding-left: 10px;
+}
+.container table .serverName {
+    width: auto;
+}
+.conteiner table .serverCode {
+    width: 7%;
+}
+.container table .serverPassword {
+    width: 9%;
+    /*background: #df06cd;*/
+}
+.container .Locked {
+    padding-top: 0.35em;
+}
+.container table .serverPing {
+    width: 5%;
+    /*background: #0099f1;*/
+}
+.container table .serverCountry {
+    width: 15%;
+}
+.container table .serverStatus {
+    width: 10%;
+    /*background: #f30000;*/
+    background: #252525;
+}

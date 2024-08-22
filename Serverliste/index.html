@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <link rel="stylesheet" href="style.css">
+    <title>Pong</title>
+</head>
+<body>
+    <div class="container" id="container">
+        <h1>Pong - Onlinegame</h1>
+        <h3>Serverliste</h3>
+        <div class="inputs">
+            <input type="text" placeholder="Suche"><button class="Search"><span class="material-symbols-outlined">search</span></button></input>
+        </div>
+        <table>
+            <tr class="serverListeHeader">
+                <th class="serverName">Name</th>
+                <th class="serverCode">Code</th>
+                <th class="serverPassword">Password</th>
+                <th class="serverPing">Ping</th>
+                <th class="serverCountry">Country</th>
+                <th class="serverStatus">Status</th>
+            </tr>
+            <tr class="serverListe">
+                <th class="serverNameClass">woejglakregöoairgöpkewfamew</th>
+                <th>12345</th>
+                <th class="Locked"><span class="material-symbols-outlined">key</span></th>
+                <th>103</th>
+                <th>Germany</th>
+                <th>Open</th>
+            </tr>
+        </table>
+        <button id="createButton" class="createGame" onclick="CreateGame()"><span class="material-symbols-outlined">add</span></button>
+        <div class="space"></div>
+    </div>
+    <script src="createGame.js"></script>
+</body>
+</html>
