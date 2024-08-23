@@ -152,6 +152,25 @@
             /*background: #f30000;*/
             background: #252525;
         }
+        .container .playButton {
+            position: fixed;
+            bottom: 2%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30%;
+            height: 5rem;
+            font-size: 40px;
+            background: #1c1c1c;
+            border: solid #3a3a3a 2px;
+            border-radius: 3px;
+            color: #fff;
+            cursor: pointer;
+        }
+        .container .playButton:hover {
+            box-shadow: 0 0 10px #3a3a3a;
+            text-shadow: 0 0 2px #fff;
+            cursor: pointer;
+        }
     </style>
     <title>Pong</title>
 </head>
@@ -162,7 +181,7 @@
         <div class="inputs">
             <input type="text" placeholder="Suche"><button class="Search"><span class="material-symbols-outlined">search</span></button></input>
         </div>
-        <table>
+        <table id="serverListe">
             <tr class="serverListeHeader">
                 <th class="serverName">Name</th>
                 <th class="serverCode">Code</th>
@@ -181,6 +200,7 @@
             </tr>
         </table>
         <button id="createButton" class="createGame" onclick="CreateGame()"><span class="material-symbols-outlined">add</span></button>
+        <button id="playButton" class="playButton">Play</button>
         <div class="space"></div>
     </div>
     <script>
