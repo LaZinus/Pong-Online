@@ -3,6 +3,12 @@ const app = express();
 const path = require('path');
 const port = 8080;
 
+
+
+wsServer = new WebSocketServer({
+    
+})
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, "./Serverliste/index.html"));
 });
