@@ -3,20 +3,18 @@ const app = express();
 const path = require('path');
 const port = 8080;
 
+const http = require('http');
+const socketIO = require('socket.io');
+
+const server = http.createServer(app);
+
+const io = socketIO(server);
 
 
-wsServer = new WebSocketServer({
-    
+io.on('connection', (socket) => {
+    console.log("User Connected!");
 })
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, "./Serverliste/index.html"));
-});
-
-app.get('/test', (req, res) => {
-    console.log("test");
-})
-
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Website is on port ${port}`);
 });
