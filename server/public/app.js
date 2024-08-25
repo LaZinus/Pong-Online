@@ -147,3 +147,43 @@ function CreateGame() {
 socket.on('redirectToGame', newUrl => {
     window.location = newUrl;
 })
+
+socket.on('addGameToServerList', (name, code, password, status) => {
+    const tabelle = document.getElementById('serverListe');
+
+    const tr = document.createElement('tr');
+
+    tr.className = "serverListe";
+
+    const serverName = document.createElement('th');
+    serverName.textContent = name;
+    serverName.className = "serverNameClass";
+
+    const serverCode = document.createElement('th');
+    serverCode.textContent = code;
+
+    const serverPassword = document.createElement('th');
+    serverPassword.className = "Locked";
+    const serverPasswordIcon = document.createElement('span');
+    serverPasswordIcon.className = "material-symbols-outlined";
+
+    if(password == true) {
+        serverPasswordIcon.textContent = "key";
+    } else {
+        serverPasswordIcon.textContent = "lock_open_right";
+    }
+
+    const serverPing = document.createElement('th');
+    serverPing.textContent = "2";
+
+    const serverStatus = document.createElement('th');
+    serverStatus.textContent = status;
+
+    tr.appendChild(serverName);
+    tr.appendChild(serverCode);
+    serverPassword.appendChild(serverPasswordIcon);
+    tr.appendChild(serverPassword);
+    tr.appendChild(serverPing);
+    tr.appendChild(serverStatus);
+    tabelle.appendChild(tr);
+})

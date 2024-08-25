@@ -36,7 +36,7 @@ const io = new Server(expressServer, {
 io.on('connection', socket => {
     console.log(`User ${socket.id} connected`);
 
-    
+    addGamesToServerList(socket);
 
     socket.on('createServer', (name, password) => {
         console.log(`Server erfollgreich erstellt. Name: ${name} | Passwort: ${password} | Code: ${serverCode}  | Status: Open | User: ${socket.id}`);
@@ -63,3 +63,6 @@ io.on('connection', socket => {
     })
 });
 
+function addGamesToServerList(socket) {
+    socket.emit('addGameToServerList', "jajaja", "1", false, "open");
+}
