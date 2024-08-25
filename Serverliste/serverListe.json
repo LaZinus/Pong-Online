@@ -1,8 +1,0 @@
-{
-    "testserver": {
-        "code": "12345",
-        "password": "awidh",
-        "country": "Germany",
-        "status": "open"
-    }
-}
