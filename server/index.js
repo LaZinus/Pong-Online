@@ -3,9 +3,6 @@ import { Server } from 'socket.io';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import geoip from 'geoip-lite';
-import { networkInterfaces } from 'os';
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -31,8 +28,7 @@ io.on('connection', socket => {
     console.log(`User ${socket.id} connected`);
 
     socket.on('createServer', (name, password) => {
-        
-        console.log(`Server erfollgreich erstellt. Name: ${name} | Passwort: ${password} | Code: ${serverCode} | Country:  | Status: Open | User: ${socket.id}`);
+        console.log(`Server erfollgreich erstellt. Name: ${name} | Passwort: ${password} | Code: ${serverCode}  | Status: Open | User: ${socket.id}`);
         serverCode++;
     })
 });
