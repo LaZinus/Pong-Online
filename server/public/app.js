@@ -144,8 +144,6 @@ function CreateGame() {
     }
 }
 
-const createServerButton = document.getElementById("createServerButton")
-
-if(createServerButton) {
-
-}
+socket.on('redirectToGame', newUrl => {
+    window.location = newUrl;
+})
