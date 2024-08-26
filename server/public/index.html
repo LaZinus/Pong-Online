@@ -189,8 +189,15 @@
             </tr>
         </table>
         <button id="createButton" class="createGame" onclick="CreateGame()"><span class="material-symbols-outlined">add</span></button>
-        <button id="playButton" class="playButton">Play</button>
+        <button id="playButton" class="playButton" onclick="Play()">Play</button>
         <div class="space"></div>
     </div>
+    <script>
+        function Play() {
+            if(selectedGame != null) {
+                socket.emit("playGame", selectedGame);
+            }
+        }
+    </script>
 </body>
 </html>

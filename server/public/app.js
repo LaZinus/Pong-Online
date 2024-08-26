@@ -1,4 +1,4 @@
-const socket = io('ws://127.0.0.1:3500');
+const socket = io('ws://raspberrypi:3500');
 
 let createGame = false;
 
@@ -156,6 +156,9 @@ socket.on('addGameToServerList', (name, code, password, status) => {
     const tr = document.createElement('tr');
 
     tr.className = "serverListe";
+    tr.onclick = function clickGame() {
+        selectedGame = code;
+    }
 
     const serverName = document.createElement('th');
     serverName.textContent = name;

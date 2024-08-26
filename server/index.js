@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = 3500;
-const serverURL = "http://127.0.0.1";
+const serverURL = "http://raspberrypi";
 
 const app = express();
 
@@ -71,6 +71,10 @@ io.on('connection', socket => {
     socket.on('goBack', () => {
         socket.emit("directToUrl", `${serverURL}:${PORT}/`)
     }) 
+
+    socket.on("playGame", (code) => {
+        socket.emit("redirectToGame", `${serverURL}:${PORT}/${code}`);
+    })
 });
 
 function addGamesToServerList(socket) {
