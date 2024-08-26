@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = 8080;
-const serverURL = "http://127.0.0.1";
+const serverURL = "http://raspberrypi";
 
 const app = express();
 
@@ -33,6 +33,21 @@ const io = new Server(expressServer, {
         origin: process.env.NODE_ENV === "production" ? false : ["http://localhost:5500", "http://127.0.0.1:5500"]
     }
 });
+
+app.get('/:code', function(req, res) {
+    if(serverCodeList.length > 0) {
+        for(var i = 0; i < serverCodeList; i++) {
+            if(req.param('code') == serverCodeList[i]) {
+                res.send("Game gefunden auf Code: " + req.param('code'));
+            } else {
+                res.send("Game  nicht gefunden auf Code: " + req.param('code'));
+            }
+        }
+    }
+    else {
+        res.send("Es gibt derzeit kein Game");
+    }
+})
 
 io.on('connection', socket => {
     console.log(`User ${socket.id} connected`);
