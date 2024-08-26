@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        } 
+        body {
+            background: #1c1c1c;
+        }
+        h1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            color: #fff;
+            transform: translate(-50%, -50%);
+            font-size: 75px;
+            margin-top: -100px;
+        }
+        button {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 10%;
+            bottom: 15px;
+            border-radius: 15px;
+            border: solid #3a3a3a 3px;
+            background: #1c1c1c;
+            color: #fff;
+            font-size: 50px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            cursor: pointer;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js" integrity="sha512-11t8Q+vY9JlCrr+PveZKTYJq8n7O09Y5X/pk/aMd3vJugSvu4xOunGEUzaADqL3I8cZKE/pBwwCfXzDkRJh2sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Not-Found</title>
+</head>
+<body>
+    <h1>Error 404: Game not Found</h1>
+    <button onclick="goBack()">Go Back</button>
+    <script>
+        const socket = io('ws://raspberrypi:3500');
+
+
+        function goBack() {
+            socket.emit("goBack");
+        }
+
+        socket.on("directToUrl", url => {
+            window.location = url;
+        })
+    </script>
+</body>
+</html>

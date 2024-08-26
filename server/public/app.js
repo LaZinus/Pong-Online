@@ -1,8 +1,10 @@
-const socket = io('ws://raspberrypi:8080');
+const socket = io('ws://raspberrypi:3500');
 
 let createGame = false;
 
 const hintergrund = document.createElement('div');
+
+var selectedGame;
 
 function CreateGame() {
     if(createGame == false) {
@@ -186,4 +188,11 @@ socket.on('addGameToServerList', (name, code, password, status) => {
     tr.appendChild(serverPing);
     tr.appendChild(serverStatus);
     tabelle.appendChild(tr);
+})
+
+socket.on("notFound", (code) => {
+    const socketWebsite = io(`ws://raspberrypi:8080/${code}`);
+    var body = document.querySelector('body');
+    body.style.background = "#1c1c1c";
+
 })
