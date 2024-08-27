@@ -116,7 +116,6 @@ function addGamesToServerList(socket) {
 app.get('/:code', function(req, res) {
     if(serverCodeList.length > 0) {
         var codeGefunden = 0;
-
         for(var i = 0; i < serverCodeList.length; i++) {
             if(req.param('code') == serverCodeList[i]) {
                 res.send("Game gefunden auf Code: " + req.param('code'));
