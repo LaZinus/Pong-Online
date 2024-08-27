@@ -66,6 +66,7 @@ io.on('connection', socket => {
                 serverCode = 1;
             }
         })
+        
     })
 
     socket.on('goBack', () => {
@@ -73,7 +74,25 @@ io.on('connection', socket => {
     }) 
 
     socket.on("playGame", (code) => {
-        socket.emit("redirectToGame", `${serverURL}:${PORT}/${code}`);
+        var data = fs.readFileSync('serverList.json');
+
+        var gameObject;
+
+        for(var i = 0; i < data.length; i++) {
+            var innerObject = data[i];
+            if(innerObject.code == code) {
+                gameObject = innerObject;
+            }
+        }
+
+        if(gameObject != null) {
+            if(innerObject.password.length > 0) {
+                socket.emit("givePassword", code);
+            } else {
+                socket.emit("redirectToGame", `${serverURL}:${PORT}/${code}`);
+            }
+        }
+        socket.emit("redirectToGame", `${serverURL}:${PORT}/${code}`)
     })
 });
 
@@ -88,7 +107,7 @@ function addGamesToServerList(socket) {
             password = false;
         }
 
-        socket.emit("addGameToServerList", data.name, data.code, password, "Open");
+        socket.emit("addGameToServerList", data.name, data.code, password, data.status);
     });
 
 }
@@ -96,8 +115,8 @@ function addGamesToServerList(socket) {
 
 app.get('/:code', function(req, res) {
     if(serverCodeList.length > 0) {
-        var url;
         var codeGefunden = 0;
+
         for(var i = 0; i < serverCodeList.length; i++) {
             if(req.param('code') == serverCodeList[i]) {
                 res.send("Game gefunden auf Code: " + req.param('code'));
