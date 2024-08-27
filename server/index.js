@@ -19,7 +19,9 @@ var serverCodeList = [];
 app.use(express.static(path.join(__dirname, "public")))
 
 const expressServer = app.listen(PORT, () => {
-    var resetServerList = []
+
+    const resetServerList = []
+
     fs.writeFile("serverList.json", JSON.stringify(resetServerList, null, 2), err => {
         if(err) throw err;
 
@@ -75,24 +77,24 @@ io.on('connection', socket => {
 
     socket.on("playGame", (code) => {
         var data = fs.readFileSync('serverList.json');
+        var server = JSON.parse(data)
+
+        var serverGefunden = 0;
+        var gefundenerServer;
+        for(let i = 0; i < server.length; i++) {
+            if(code == server[i].code) {
+                serverGefunden++;
+                gefundenerServer = server[i];
+            }
+        }
+
+        if(serverGefunden == 0) {
+            if(gefundenerServer.password.length > 0) {
+
+            }
+        }
 
         var gameObject;
-
-        for(var i = 0; i < data.length; i++) {
-            var innerObject = data[i];
-            if(innerObject.code == code) {
-                gameObject = innerObject;
-            }
-        }
-
-        if(gameObject != null) {
-            if(innerObject.password.length > 0) {
-                socket.emit("givePassword", code);
-            } else {
-                socket.emit("redirectToGame", `${serverURL}:${PORT}/${code}`);
-            }
-        }
-        socket.emit("redirectToGame", `${serverURL}:${PORT}/${code}`)
     })
 });
 
