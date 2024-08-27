@@ -90,7 +90,7 @@ io.on('connection', socket => {
 
         if(serverGefunden == 0) {
             if(gefundenerServer.password.length > 0) {
-
+                
             }
         }
 
