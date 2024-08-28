@@ -9,11 +9,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = 8080;
-const serverURL = "http://raspberrypi";
+const serverURL = "http://127.0.0.1";
 
 const app = express();
 
 var serverCode = 1;
+var serverCodeList = [];
 
 app.use(express.static(path.join(__dirname, "public")))
 
@@ -58,11 +59,28 @@ io.on('connection', socket => {
 
             socket.emit('redirectToGame', `${serverURL}:${PORT}/${serverCode}`)
             console.log("[Server] Server added")
+            serverCodeList.push(serverCode);
+            console.log(serverCodeList.toString());
             serverCode++;
+            if(serverCode == 10000) {
+                serverCode = 1;
+            }
         })
     })
 });
 
 function addGamesToServerList(socket) {
-    socket.emit('addGameToServerList', "jajaja", "1", false, "open");
+    const serverData = JSON.parse(fs.readFileSync('serverList.json', 'utf8'));
+
+    serverData.forEach(data => {
+        var password;
+        if(data.password.length > 0) {
+            password = true;
+        } else {
+            password = false;
+        }
+
+        socket.emit("addGameToServerList", data.name, data.code, password, "Open");
+    });
+
 }
