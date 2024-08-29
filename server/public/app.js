@@ -1,4 +1,4 @@
-const socket = io('ws://raspberrypi:3500');
+const socket = io('ws://127.0.0.1:3500');
 
 let createGame = false;
 
