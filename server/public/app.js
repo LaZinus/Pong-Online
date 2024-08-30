@@ -255,6 +255,9 @@ socket.on("playGamePassword", (code) => {
     button.style.fontSize = "25px";
     button.style.fontWeight = "500";
     button.style.cursor = "pointer";
+    button.onclick = function () {
+        socket.emit("join", code);
+    }
 
     container.appendChild(hintergrund)
     hintergrund.appendChild(h1);
