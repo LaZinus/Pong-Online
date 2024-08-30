@@ -213,6 +213,8 @@ socket.on("playGamePassword", (code) => {
     hintergrund.style.height = "35%";
     hintergrund.style.background = "#252525";
     hintergrund.style.borderRadius = "3px";
+    hintergrund.style.border = "solid #3a3a3a 2px";
+    hintergrund.style.boxShadow = "0 0 5px #3a3a3a";
 
     const h1 = document.createElement('h1');
     h1.textContent = "Password";
@@ -231,7 +233,7 @@ socket.on("playGamePassword", (code) => {
     input.style.transform = "translate(-50%, -45%)";
     input.maxLength = "25";
     input.style.paddingLeft = "15px";
-    input.style.paddingRight = "5px";
+    input.style.paddingRight = "10px";
     input.style.outline = "none";
     input.style.border = "solid #3a3a3a 2px";
     input.style.color = "#fff";
@@ -252,6 +254,7 @@ socket.on("playGamePassword", (code) => {
     button.style.color = "#fff";
     button.style.fontSize = "25px";
     button.style.fontWeight = "500";
+    button.style.cursor = "pointer";
 
     container.appendChild(hintergrund)
     hintergrund.appendChild(h1);
