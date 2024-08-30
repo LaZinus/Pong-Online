@@ -83,18 +83,16 @@ io.on('connection', socket => {
         var gefundenerServer;
         for(let i = 0; i < server.length; i++) {
             if(code == server[i].code) {
-                serverGefunden++;
+                serverGefunden = serverGefunden +1;
                 gefundenerServer = server[i];
             }
         }
 
-        if(serverGefunden == 0) {
+        if(serverGefunden > 0) {
             if(gefundenerServer.password.length > 0) {
-                
+                socket.emit('playGamePassword', code);
             }
         }
-
-        var gameObject;
     })
 });
 

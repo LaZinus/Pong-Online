@@ -104,6 +104,7 @@ function CreateGame() {
         passwordInput.style.fontWeight = "500";
         passwordInput.placeholder = "Server Password";
         passwordInput.id = "createServerPassword"
+        passwordInput.maxLength = "25";
 
 
         const createButton = document.createElement('button');
@@ -199,3 +200,61 @@ socket.on("notFound", (code) => {
     body.style.background = "#1c1c1c";
 
 })
+
+socket.on("playGamePassword", (code) => {
+    const container = document.getElementById('container');
+
+    const hintergrund = document.createElement('div');
+    hintergrund.style.position = "fixed";
+    hintergrund.style.top = "50%";
+    hintergrund.style.left = "50%";
+    hintergrund.style.transform = "translate(-50%, -50%)";
+    hintergrund.style.width = "25%";
+    hintergrund.style.height = "35%";
+    hintergrund.style.background = "#252525";
+    hintergrund.style.borderRadius = "3px";
+
+    const h1 = document.createElement('h1');
+    h1.textContent = "Password";
+    h1.style.fontSize = "30px";
+
+    const input = document.createElement('input');
+    input.style.position = "absolute";
+    input.type = "password";
+    input.placeholder = "Password";
+    input.style.width = "75%";
+    input.style.height = "3rem";
+    input.style.borderRadius = "3px";
+    input.style.left = "50%";
+    input.style.top = "45%";
+    input.style.fontSize = "20px";
+    input.style.transform = "translate(-50%, -45%)";
+    input.maxLength = "25";
+    input.style.paddingLeft = "15px";
+    input.style.paddingRight = "5px";
+    input.style.outline = "none";
+    input.style.border = "solid #3a3a3a 2px";
+    input.style.color = "#fff";
+    input.style.background = "#252525";
+
+    const button = document.createElement('button');
+    button.style.position = "absolute";
+    button.textContent = "Join";
+    button.style.width = "75%";
+    button.style.height = "3rem";
+    button.style.bottom = "15%";
+    button.style.left = "50%";
+    button.style.transform = "translateX(-50%)";
+    button.style.outline = "none";
+    button.style.background = "#252525";
+    button.style.borderRadius = "3px";
+    button.style.border = "solid #3a3a3a 2px"
+    button.style.color = "#fff";
+    button.style.fontSize = "25px";
+    button.style.fontWeight = "500";
+
+    container.appendChild(hintergrund)
+    hintergrund.appendChild(h1);
+    hintergrund.appendChild(input);
+    hintergrund.appendChild(button);
+}) 
