@@ -15,6 +15,7 @@ const app = express();
 
 var serverCode = 1;
 var serverCodeList = [];
+var spielerProServer = [];
 
 app.use(express.static(path.join(__dirname, "public")))
 
@@ -63,6 +64,7 @@ io.on('connection', socket => {
             console.log("[Server] Server added")
             serverCodeList.push(serverCode);
             console.log(serverCodeList.toString());
+            spielerProServer[code - 1] = 1;
             serverCode++;
             if(serverCode == 10000) {
                 serverCode = 1;
@@ -89,9 +91,7 @@ io.on('connection', socket => {
         }
 
         if(serverGefunden > 0) {
-            if(gefundenerServer.password.length > 0) {
-                socket.emit('playGamePassword', code);
-            }
+            socket.emit("directToUrl", `${serverURL}:${PORT}/${code}`);
         }
     })
 });
@@ -112,22 +112,35 @@ function addGamesToServerList(socket) {
 
 }
 
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname, "/public/index.html"));
+})
 
 app.get('/:code', function(req, res) {
-    if(serverCodeList.length > 0) {
-        var codeGefunden = 0;
-        for(var i = 0; i < serverCodeList.length; i++) {
-            if(req.param('code') == serverCodeList[i]) {
-                res.send("Game gefunden auf Code: " + req.param('code'));
-                codeGefunden++;
+    var data = fs.readFileSync('serverList.json');
+    var newObject = JSON.parse(data);
+
+    var gefunden = 0;
+
+    if(newObject != null) {
+        for(let i = 0; i < newObject.length; i++) {
+            if(req.param('code') == newObject[i].code) {
+                if(spielerProServer[newObject[i].code - 1] < 2) {
+                    if(newObject[i].password.length > 0) {
+                        res.sendFile(path.join(__dirname, "/public/password.html"));
+                        return;
+                    } else {
+                        res.send("Connected to game: " + newObject[i].code);
+                        gefunden++;
+                        spielerProServer[newObject[i].code - 1]++;
+                        return;
+                    }
+                } else {
+                    res.sendFile(path.join(__dirname, "/public/toManyPlayers.html"));
+                    return;
+                }
             }
         }
-        if(codeGefunden == 0) {
-            res.sendFile(path.join(__dirname, "/public/notFound.html"));
-        }
     }
-    else {
-        res.sendFile(path.join(__dirname, "/public/notFound.html"));
-        return;
-    }
+
 })
