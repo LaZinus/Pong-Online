@@ -135,8 +135,13 @@ app.get('/:code', function(req, res) {
                     }
                 } else {
                     res.sendFile(path.join(__dirname, "/public/toManyPlayers.html"));
+                    return;
                 }
             }
         }
+    }
+
+    if(gefunden == 0) {
+        res.sendFile(path.join(__dirname, "/public/notFound.html"));
     }
 })
