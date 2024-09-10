@@ -200,3 +200,9 @@ socket.on("notFound", (code) => {
     body.style.background = "#1c1c1c";
 
 })
+
+socket.on("disconnectedUser", () => {
+    const param = new URLSearchParams(window.location.search)
+
+    socket.emit("getParam", param);
+})

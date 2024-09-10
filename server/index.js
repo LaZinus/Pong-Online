@@ -64,7 +64,7 @@ io.on('connection', socket => {
             console.log("[Server] Server added")
             serverCodeList.push(serverCode);
             console.log(serverCodeList.toString());
-            spielerProServer[serverCode - 1] = 1;
+            spielerProServer[serverCode - 1] = 0;
             serverCode++;
             if(serverCode == 10000) {
                 serverCode = 1;
@@ -109,7 +109,6 @@ function addGamesToServerList(socket) {
 
         socket.emit("addGameToServerList", data.name, data.code, password, data.status);
     });
-
 }
 
 app.get('/', function(req, res) {
@@ -128,13 +127,16 @@ app.get('/:code', function(req, res) {
                 if(spielerProServer[newObject[i].code - 1] < 2) {
                     if(newObject[i].password.length > 0) {
                         res.sendFile(path.join(__dirname, "/public/password.html"));
+                        return;
                     } else {
                         res.send("Connected to game: " + newObject[i].code);
                         gefunden++;
                         spielerProServer[newObject[i].code - 1]++;
+                        return;
                     }
                 } else {
                     res.sendFile(path.join(__dirname, "/public/toManyPlayers.html"));
+                    console.log("Player: " + spielerProServer[newObject[i].code - 1]);
                     return;
                 }
             }
