@@ -33,7 +33,7 @@ const expressServer = app.listen(PORT, () => {
 
 const io = new Server(expressServer, {
     cors: {
-        origin: process.env.NODE_ENV === "production" ? false : ["http://localhost:5500", "http://127.0.0.1:5500"]
+        origin: process.env.NODE_ENV === "production" ? false : ["http://localhost:5500", "http://127.0.0.1:5500", "http://raspberrypi:5500"]
     }
 });
 
@@ -92,6 +92,26 @@ io.on('connection', socket => {
 
         if(serverGefunden > 0) {
             socket.emit("redirectToGame", `${serverURL}:${PORT}/${code}`);
+        }
+    })
+
+    socket.on("join", (password, code) => {
+        var data = fs.readFileSync('serverList.json');
+        var newObject = JSON.parse(data);
+
+        var gefunden = 0;
+        for(let i = 0; i < newObject.length; i++) {
+            if (newObject[i].code == code) {
+                gefunden++;
+                if(newObject[i].password == password) {
+                    socket.emit("sendGameFile", path.join(__dirname, "../game/index.html"));
+                } else {
+                    socket.emit("passwortWarnung", "Password does not match");
+                }
+            }
+        }
+        if(gefunden == 0) {
+            socket.emit("passwortWarnung", "Server wurde nicht gefunden / wurde gelöscht");
         }
     })
 });

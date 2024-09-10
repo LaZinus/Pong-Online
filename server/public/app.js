@@ -202,7 +202,5 @@ socket.on("notFound", (code) => {
 })
 
 socket.on("disconnectedUser", () => {
-    const param = new URLSearchParams(window.location.search)
-
     socket.emit("getParam", param);
 })
