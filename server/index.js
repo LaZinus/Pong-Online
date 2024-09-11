@@ -104,7 +104,13 @@ io.on('connection', socket => {
             if (newObject[i].code == code) {
                 gefunden++;
                 if(newObject[i].password == password) {
-                    socket.emit("sendGameFile", path.join(__dirname, "../game/index.html"));
+                    fs.readFile(path.join(__dirname, "/game/index.html"), "utf8", (err, data) => {
+                        if(err) {
+                            console.error("Fehler beim lesen der Datei", err);
+                            return;
+                        }
+                        socket.emit('sendGameFile', data);
+                    })
                 } else {
                     socket.emit("passwortWarnung", "Password does not match");
                 }
