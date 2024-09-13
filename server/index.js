@@ -103,21 +103,51 @@ io.on('connection', socket => {
         for(let i = 0; i < newObject.length; i++) {
             if (newObject[i].code == code) {
                 gefunden++;
-                if(newObject[i].password == password) {
-                    fs.readFile(path.join(__dirname, "/game/index.html"), "utf8", (err, data) => {
-                        if(err) {
-                            console.error("Fehler beim lesen der Datei", err);
-                            return;
-                        }
-                        socket.emit('sendGameFile', data);
-                    })
+                if(spielerProServer[code - 1] < 2) {
+                    if(newObject[i].password == password) {
+                        fs.readFile(path.join(__dirname, "/game/index.html"), "utf8", (err, data) => {
+                            if(err) {
+                                console.error("Fehler beim lesen der Datei", err);
+                                return;
+                            }
+
+                            spielerProServer[code - 1]++;
+
+                            if(spielerProServer[code -1] == 2) {
+                                newObject[i].status = "Closed";
+
+                                var newData = JSON.stringify(newObject, null, 2);
+                                fs.writeFile('serverList.json', newData, err => {if(err) throw err;})
+                            }
+                            socket.emit('sendGameFile', data);
+                        })
+                    } else {
+                        socket.emit("passwortWarnung", "Password does not match");
+                    }
                 } else {
-                    socket.emit("passwortWarnung", "Password does not match");
+                    socket.emit("directToUrl", `${serverURL}:${PORT}/`)
                 }
             }
         }
         if(gefunden == 0) {
             socket.emit("passwortWarnung", "Server wurde nicht gefunden / wurde gelöscht");
+        }
+    })
+
+    socket.on("disconnectedUser", (code) => {
+        spielerProServer[code - 1]--;
+        console.log("test1");
+        if(spielerProServer[code - 1] == 0) {
+            var data = fs.readFileSync('serverList.json');
+            var newObject = JSON.parse(data);
+
+            for(let i = 0; i < newObject.length; i++) {
+                if(newObject[i].code == code) {
+                    delete newObject[i];
+                    var newData = JSON.stringify(newObject, null, 2);
+                    fs.writeFile('serverList.json', newData, err => {if(err) throw err;})
+                }
+            }
         }
     })
 });

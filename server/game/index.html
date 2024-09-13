@@ -1,105 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background: #1c1c1c;
-        }
-        .container {
-            width: 100%;
-            height: 100%;
-        }
-        .container .gameBoard {
-            position: absolute;
-            background: #272727;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 70rem;
-            height: 35rem;
-            border-radius: 5px;
-            box-shadow: 0 0 10px #fff;
-        }
-        .container .gameBoard .middleLine {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 5px;
-            height: 100%;
-            border-inline: dashed #fff 5px;
-        }
-        .container .gameBoard .leftSide {
-            position: absolute;
-            width: 50%;
-            height: 100%;
-        }
-        .container .gameBoard .leftSide .count .scoreLeft {
-            position: absolute;
-            right: 100px;
-            margin-top: 15px;
-            color: #fff;
-            font-size: 100px;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        }
-
-        .container .gameBoard .rightSide {
-            position: absolute;
-            right: 0;
-            width: 50%;
-            height: 100%;
-        }
-        .container .gameBoard .rightSide .count .scoreRight {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            left: 100px;
-            margin-top: 15px;
-            color: #fff;
-            font-size: 100px;
-            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        }
-        .container .gameBoard .leftSide .player {
-            position: absolute;
-            width: 30px;
-            height: 7rem;
-            margin-left: 1.5rem;
-            background: #fff;
-        }
-        .container .gameBoard .rightSide .player {
-            position: absolute;
-            width: 30px;
-            height: 7rem;
-            right: 0;
-            margin-right: 1.5rem;
-            background: #fff;
-        }
-    </style>
-    <title>Pong-Spiel</title>
-</head>
-<body>
-    <div class="container">
-        <div class="gameBoard">
-            <div class="leftSide">
-                <div class="count">
-                    <h4 class="scoreLeft">0</h4>
-                </div>
-                <div class="player"></div>
+<div class="webContainer">
+    <div class="gameBoard">
+        <div class="leftSide">
+            <div class="count">
+                <h4 class="scoreLeft">0</h4>
             </div>
-            <span class="middleLine"></span>
-            <div class="rightSide">
-                <div class="count">
-                    <h4 class="scoreRight">0</h4>
-                </div>
-                <div class="player"></div>
+            <div class="player"></div>
+        </div>
+        <span class="middleLine"></span>
+        <div class="rightSide">
+            <div class="count">
+                <h4 class="scoreRight">0</h4>
             </div>
+            <div class="player"></div>
         </div>
     </div>
-</body>
-</html>
+</div>
+<script>
+    const socket = io('ws://raspberrypi:3500');
+
+    const url = window.location.href
+    const splittetUrl = url.split("/");
+    const param = splittetUrl[splittetUrl.length - 1];
+
+    socket.on('disconnect', () => {
+            socket.emit("disconnectedUser", param)
+    })
+</script>
