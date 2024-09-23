@@ -1,28 +1,29 @@
-<div class="webContainer">
-    <div class="gameBoard">
-        <div class="leftSide">
-            <div class="count">
-                <h4 class="scoreLeft">0</h4>
-            </div>
-            <div class="player"></div>
-        </div>
-        <span class="middleLine"></span>
-        <div class="rightSide">
-            <div class="count">
-                <h4 class="scoreRight">0</h4>
-            </div>
-            <div class="player"></div>
-        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js" integrity="sha512-11t8Q+vY9JlCrr+PveZKTYJq8n7O09Y5X/pk/aMd3vJugSvu4xOunGEUzaADqL3I8cZKE/pBwwCfXzDkRJh2sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Pong-Online - Game</title>
+</head>
+<body>
+    <div class="container">
+        <h4>Willkommen im Spiel</h4>
     </div>
-</div>
-<script>
-    const socket = io('ws://raspberrypi:3500');
+    <script>
+        const socket = io('ws://raspberrypi:3500');
 
-    const url = window.location.href
-    const splittetUrl = url.split("/");
-    const param = splittetUrl[splittetUrl.length - 1];
+        const url = window.location.href
+        const splittetUrl = url.split("/");
+        const param = splittetUrl[splittetUrl.length - 2];
+        const id = splittetUrl[splittetUrl.length -1];
 
-    socket.on('disconnect', () => {
-            socket.emit("disconnectedUser", param)
-    })
-</script>
+
+        socket.on("connection", function(socket) {
+            socket.on("disconnect", () => {
+                socket.emit("disconnectedUser", param, id);
+            })
+        })
+    </script>
+</body>
+</html>
