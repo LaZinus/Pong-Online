@@ -3,15 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=link" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.min.js" integrity="sha512-11t8Q+vY9JlCrr+PveZKTYJq8n7O09Y5X/pk/aMd3vJugSvu4xOunGEUzaADqL3I8cZKE/pBwwCfXzDkRJh2sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #1c1c1c;
+        }
+        .container {
+            width: 100%;
+            height: 100%;
+        }
+        .spielbrett {
+            position: absolute;
+            height: 50rem;
+            width: 85rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #252525;
+            border: none;
+            border-radius: 5px;
+        }
+        .spielbrett .middle-line{
+            position: relative;
+            left: 50%;
+            height: 100%;
+            width: 3px;
+            transform: translateX(-50%);
+            background: #fff;
+        }
+        .container .copy-link {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            width: 75px;
+            height: 75px;
+        }
+        .container .copy-link button {
+            width: 100%;
+            height: 100%;
+            background: #1c1c1c;
+            border: solid #3a3a3a 2px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .container .copy-link button span {
+            color: #fff;
+            font-size: 40px;
+        }
+    </style>
     <title>Pong-Online - Game</title>
 </head>
 <body>
     <div class="container">
-        <h4>Willkommen im Spiel</h4>
+        <div class="copy-link">
+            <button onclick="copyLink()"><span class="material-symbols-outlined">link</span></button>
+        </div>
+        <div class="spielbrett">
+            <div class="left-side">
+                <span class="left-player-object"></span>
+            </div>
+            <span class="middle-line"></span>
+            <div class="right-side">
+                <span class="right-player-object"></span>
+            </div>
+            <span class="ball"></span>
+        </div>
     </div>
     <script>
-        const socket = io('ws://raspberrypi:3500');
+        const socket = io('ws://raspberrypi:8080');
 
         const url = window.location.href
         const splittetUrl = url.split("/");
@@ -19,11 +84,19 @@
         const id = splittetUrl[splittetUrl.length -1];
 
 
-        socket.on("connection", function(socket) {
-            socket.on("disconnect", () => {
-                socket.emit("disconnectedUser", param, id);
-            })
+        socket.on("connect", () => {
+            socket.emit("playerJoined", param, socket.id)
         })
+
+        function copyLink() {
+            const tempInput = document.createElement("input");
+            tempInput.value = url;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+            alert("Copied the URL");
+        }
     </script>
 </body>
 </html>

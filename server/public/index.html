@@ -73,6 +73,7 @@
             background: #1c1c1c;
             border-radius: 3px;
             color: #fff;
+            cursor: pointer;
         }
         .container .createGame {
             position: -webkit-sticky;
@@ -114,6 +115,10 @@
             cursor: default;
         }
         .container table tr:hover{
+            background: #313131;
+            cursor: pointer;
+        }
+        #spiel:hover {
             background: #313131;
             cursor: pointer;
         }
@@ -177,7 +182,7 @@
         <h1>Pong - Onlinegame</h1>
         <h3>Serverliste</h3>
         <div class="inputs">
-            <input type="text" placeholder="Suche"><button class="Search"><span class="material-symbols-outlined">search</span></button></input>
+            <input type="text" id="searchInput" placeholder="Suche"><button class="Search" onclick="Search(document.getElementById('searchInput').value)"><span class="material-symbols-outlined">search</span></button></input>
         </div>
         <table id="serverListe">
             <tr class="serverListeHeader">

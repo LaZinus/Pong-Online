@@ -1,8 +1,10 @@
-const socket = io('ws://raspberrypi:3500');
+const socket = io('ws://raspberrypi:8080');
 
 let createGame = false;
 
 const hintergrund = document.createElement('div');
+
+var oldSelectedGame;
 
 var selectedGame;
 
@@ -157,9 +159,20 @@ socket.on('addGameToServerList', (name, code, password, status) => {
     const tr = document.createElement('tr');
 
     tr.className = "serverListe";
+    tr.id = "serverListeGame";
     tr.onclick = function clickGame() {
         selectedGame = code;
-    }
+
+        if(oldSelectedGame != null) {
+            oldSelectedGame.style.background = "#1c1c1c";
+            oldSelectedGame.id = "spiel";
+            oldSelectedGame = tr;
+            tr.style.background = "#2a2a2a";
+        } else {
+            oldSelectedGame = tr;
+            tr.style.background = "#2a2a2a";
+        }
+    };
 
     const serverName = document.createElement('th');
     serverName.textContent = name;
@@ -204,3 +217,11 @@ socket.on("notFound", (code) => {
 socket.on("disconnectedUser", () => {
     socket.emit("getParam", param);
 })
+
+function Search(text) {
+    const elements  = document.querySelectorAll('#serverListeGame');
+    elements.forEach(element => {
+        element.remove();
+    })
+    socket.emit("searchGame", text);
+}

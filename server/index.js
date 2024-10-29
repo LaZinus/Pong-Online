@@ -8,7 +8,7 @@ import fs from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = 3500;
+const PORT = 8080;
 const serverURL = "http://raspberrypi";
 
 const app = express();
@@ -17,7 +17,9 @@ var serverCode = 1;
 var serverCodeList = [];
 var spielerProServer = [];
 
-var spieler = [];
+var server = 0;
+var spieler = 0;
+
 
 app.use(express.static(path.join(__dirname, "public")))
 
@@ -25,12 +27,18 @@ const expressServer = app.listen(PORT, () => {
 
     const resetServerList = []
 
+    fs.writeFile("spieler.json", JSON.stringify(resetServerList, null, 2), err => {
+        if(err) throw err;
+
+        console.log("[Server] Spielerliste gelöscht!");
+    })
+
     fs.writeFile("serverList.json", JSON.stringify(resetServerList, null, 2), err => {
         if(err) throw err;
 
-        console.log("[Server] Serverliste gelöscht!")
+        console.log("[Server] Serverliste gelöscht!");
     })
-    console.log(`[Server] listening on ${PORT}`);
+
 });
 
 const io = new Server(expressServer, {
@@ -40,12 +48,10 @@ const io = new Server(expressServer, {
 });
 
 io.on('connection', socket => {
-    console.log(`User ${socket.id} connected`);
 
     addGamesToServerList(socket);
 
     socket.on('createServer', (name, password) => {
-        console.log(`Server erfollgreich erstellt. Name: ${name} | Passwort: ${password} | Code: ${serverCode}  | Status: Open | User: ${socket.id}`);
 
         var data = fs.readFileSync('serverList.json');
         var newObject = JSON.parse(data);
@@ -73,16 +79,52 @@ io.on('connection', socket => {
             if(err) throw err;
 
             socket.emit('redirectToGame', `${serverURL}:${PORT}/${serverCode}/${result}`)
-            console.log("[Server] Server added")
             serverCodeList.push(serverCode);
-            console.log(serverCodeList.toString());
             spielerProServer[serverCode - 1] = 0;
             serverCode++;
             if(serverCode == 10000) {
                 serverCode = 1;
             }
+            server++;
         })
         
+    })
+
+    socket.on('searchGame', (text) => {
+        var data = fs.readFileSync('serverList.json');
+        var server = JSON.parse(data)
+
+        if(text != "") {
+            if(text.toLowerCase() == "open") {
+                for(let i = 0; i < server.length; i++) {
+                    if(server[i].status == "Open") {
+                        let password = false;
+                        if(server[i].password.length > 0) {
+                            password = true;
+                        }
+                        socket.emit("addGameToServerList", server[i].name, server[i].code, password, server[i].status);
+                    }
+                }
+            } else {
+                for(let i = 0; i < server.length; i++) {
+                    if(server[i].name.includes(text)) {
+                        let password = false;
+                        if(server[i].password.length > 0) {
+                            password = true;
+                        }
+                        socket.emit("addGameToServerList", server[i].name, server[i].code, password, server[i].status);
+                    } else if (server[i].code == text) {
+                        let password = false;
+                        if(server[i].password.length > 0) {
+                            password = true;
+                        }
+                        socket.emit("addGameToServerList", server[i].name, server[i].code, password, server[i].status);
+                    }
+                }
+            }
+        } else {
+            addGamesToServerList(socket);
+        }
     })
 
     socket.on('goBack', () => {
@@ -137,16 +179,75 @@ io.on('connection', socket => {
         }
     })
 
-    socket.on("userConnceted", () => {
-        console.log("User Connected");
+    socket.on("playerJoined", (code, socketID) => {
+        var data = fs.readFileSync('serverList.json');
+        var newObject = JSON.parse(data);
+
+        var spielerData = fs.readFileSync('spieler.json');
+        var newSpielerObject = JSON.parse(spielerData);
+
+        if(newObject != null) {
+            for(let i = 0; i < newObject.length; i++) {
+                if(newObject[i].code == code) {
+                    spielerProServer[newObject[i].code - 1]++;
+
+                    const newPlayer = {
+                        "name": `${socketID}`,
+                        "game": code
+                    }
+
+                    newSpielerObject.push(newPlayer);
+
+                    spieler++;
+
+                    if(spielerProServer[newObject[i].code - 1] > 1) {
+                        newObject[i].status = "Closed";
+                    }
+
+                    var newData = JSON.stringify(newObject, null, 2);
+                    fs.writeFile('serverList.json', newData, err => {if(err) throw err;})
+
+                    var newSpielerData = JSON.stringify(newSpielerObject, null, 2);
+                    fs.writeFile('spieler.json', newSpielerData, err => {if(err) throw err;})
+                }
+            }
+        }
     })
 
     socket.on("disconnect", function()  {
-        for(let i = 0; i < spieler.length; i++) {
-            if(spieler[i].name == socket.id) {
-                spielerProServer[spieler[i].game - 1]--;
+        var spielerData = fs.readFileSync('spieler.json');
+        var newSpielerObject = JSON.parse(spielerData);
 
-                delete spieler[i]
+        var data = fs.readFileSync('serverList.json');
+        var newObject = JSON.parse(data);
+
+        if(newSpielerObject.length > 0) {
+            for(let i = 0; i < newSpielerObject.length; i++) {
+                if(newSpielerObject[i].name == socket.id) {
+                    spielerProServer[newSpielerObject[i].game - 1]--;
+                    
+                    for(let k = 0; k < newObject.length; k++) {
+                        if(newObject[k].code == newSpielerObject[i].game) {
+                            newObject[k].status = "Open";
+                        }
+                    }
+
+                    newSpielerObject.splice(i, 1);
+                    spieler--;
+
+                    if(spieler == 0) {
+                        newSpielerObject = [];
+                        var newSpielerData = JSON.stringify(newSpielerObject, null, 2);
+                        fs.writeFile('spieler.json', newSpielerData, err => {if(err) throw err;})
+                    } else {
+                        var newSpielerData = JSON.stringify(newSpielerObject, null, 2);
+                        fs.writeFile('spieler.json', newSpielerData, err => {if(err) throw err;})
+                    }
+
+                    var newData = JSON.stringify(newObject, null, 2);
+                    fs.writeFile('serverList.json', newData, err => {if(err) throw err;})
+                    
+                }
             }
         }
     })
@@ -192,7 +293,6 @@ app.get('/:code', function(req, res) {
                     }
                 } else {
                     res.sendFile(path.join(__dirname, "/public/toManyPlayers.html"));
-                    console.log("Player: " + spielerProServer[newObject[i].code - 1]);
                     return;
                 }
             }
@@ -214,29 +314,12 @@ app.get('/:code/:id', function(req, res) {
                 if(req.param('id') == newObject[i].id) {
                     if(spielerProServer[newObject[i].code - 1] < 2) {
                         res.sendFile(path.join(__dirname, "/game/index.html"));
-                        spielerProServer[newObject[i].code - 1]++;
-
                         newObject[i].time = 2;
-
-                        if(spielerProServer[newObject[i].code - 1] > 1) {
-                            newObject[i].status = "Closed";
-                        }
-
                         var newData = JSON.stringify(newObject, null, 2);
                         fs.writeFile('serverList.json', newData, err => {if(err) throw err;})
-
-                        console.log("Player: " + spielerProServer[newObject[i].code - 1]);
-
-                        const newPlayer = {
-                            "name": req.socket.id,
-                            "game": newObject[i].code
-                        }
-
-                        spieler.push(newPlayer);
                         return;
                     } else {
                         res.sendFile(path.join(__dirname, "/public/toManyPlayers.html"));
-                        console.log("Player: " + spielerProServer[newObject[i].code - 1]);
                         return;
                     }
                 }
@@ -251,19 +334,26 @@ setInterval(function() {
     var data = fs.readFileSync('serverList.json');
     var newObject = JSON.parse(data);
 
+    var liste = [];
+
     if(newObject != null) {
         for(let i = 0; i < newObject.length; i++) {
             if(spielerProServer[newObject[i].code - 1] == 0) {
                 if(newObject[i].time > 0) {
                     newObject[i].time--;
                 } else {
-                    delete newObject[i]
+                    liste.push(i);
+                    server--;
                 }
             }
         }
 
+        for(let k = 0; k < liste.length; k++) {
+            newObject.splice(liste[k], 1);
+        }
+
         var newJSON = [];
-        if(newObject == null) {
+        if(server == 0) {
             var newData = JSON.stringify(newJSON, null, 2);
             fs.writeFile('serverList.json', newData, err => {if(err) throw err;})
         } else {
