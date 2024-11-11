@@ -20,6 +20,7 @@
         }
         .spielbrett {
             position: absolute;
+            display: flex;
             height: 50rem;
             width: 85rem;
             top: 50%;
@@ -29,8 +30,8 @@
             border: none;
             border-radius: 5px;
         }
-        .spielbrett .middle-line{
-            position: relative;
+        .container .spielbrett .middle-line{
+            position: absolute;
             left: 50%;
             height: 100%;
             width: 3px;
@@ -56,6 +57,31 @@
             color: #fff;
             font-size: 40px;
         }
+        .container .spielbrett .left-side {
+            width: 50%;
+            height: 100%;
+            display: flex;
+        }
+        .container .spielbrett .left-side .left-player-object {
+            position: relative;
+            width: 35px;
+            height: 125px;
+            background: #fff;
+            left: 25px;
+        }
+        .container .spielbrett .right-side {
+            width: 50%;
+            height: 100%;
+            display: flex;
+        }
+        .container .spielbrett .right-side .right-player-object {
+            position: absolute;
+            width: 35px;
+            height: 125px;
+            background: #fff;
+            right: 25px;
+            top: 84.3%;
+        }
     </style>
     <title>Pong-Online - Game</title>
 </head>
@@ -66,11 +92,11 @@
         </div>
         <div class="spielbrett">
             <div class="left-side">
-                <span class="left-player-object"></span>
+                <span id="player1" class="left-player-object"></span>
             </div>
             <span class="middle-line"></span>
             <div class="right-side">
-                <span class="right-player-object"></span>
+                <span id="player2" class="right-player-object"></span>
             </div>
             <span class="ball"></span>
         </div>
@@ -82,6 +108,12 @@
         const splittetUrl = url.split("/");
         const param = splittetUrl[splittetUrl.length - 2];
         const id = splittetUrl[splittetUrl.length -1];
+
+        let playerDown = false;
+        let playerUp = false;
+
+        const player1 = document.getElementById('player1')
+        var player1Position = 0;
 
 
         socket.on("connect", () => {
@@ -96,6 +128,45 @@
             document.execCommand("copy");
             document.body.removeChild(tempInput);
             alert("Copied the URL");
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if(e.key == 'w') {
+                if(playerDown == false) {
+                    playerUp = true;
+                }
+            }
+            if(e.key == 's') {
+                if(playerUp == false) {
+                    playerDown = true;
+                }
+            }
+        })
+
+        document.addEventListener('keyup', function(e) {
+            if(e.key === 'w') {
+                playerUp = false;
+            }
+            if(e.key == 's') {
+                playerDown = false;
+            }
+        })
+
+        while (playerUp) {
+            console.log("test");
+            if(playerUp == true) {
+                if(player1Position >= 0) {
+                    player1Position -= 8.43;
+                    player1.style.top = `${player1Position}%`;
+                    console.log("test");
+                }
+            }
+            if(playerDown == true) {
+                if(player1Position <= 84.3) {
+                    player1Position += 8.43;
+                    player1.style.top = `${player1Position}%`;
+                }
+            }
         }
     </script>
 </body>
