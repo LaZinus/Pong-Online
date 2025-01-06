@@ -1,4 +1,4 @@
-const socket = io('ws://raspberrypi:8080');
+const socket = io('ws://pong:8080');
 
 let createGame = false;
 

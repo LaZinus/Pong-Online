@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const PORT = 8080;
-const serverURL = "http://raspberrypi";
+const serverURL = "http://pong";
 
 const app = express();
 
@@ -191,9 +191,22 @@ io.on('connection', socket => {
                 if(newObject[i].code == code) {
                     spielerProServer[newObject[i].code - 1]++;
 
+                    let playerID = 1;
+
+                    if(newSpielerObject != null) {
+                        for(let k = 0; k < newSpielerObject.length; k++) {
+                            if(newSpielerObject[i].game == code) {
+                                if(newSpielerObject[i].playerID == 1) {
+                                    playerID = 2;
+                                }
+                            }
+                        }
+                    }
+
                     const newPlayer = {
                         "name": `${socketID}`,
-                        "game": code
+                        "game": code,
+                        "playerID": playerID,
                     }
 
                     newSpielerObject.push(newPlayer);

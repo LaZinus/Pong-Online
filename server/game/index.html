@@ -102,18 +102,17 @@
         </div>
     </div>
     <script>
-        const socket = io('ws://raspberrypi:8080');
+        const socket = io('ws://pong:8080');
 
         const url = window.location.href
         const splittetUrl = url.split("/");
         const param = splittetUrl[splittetUrl.length - 2];
         const id = splittetUrl[splittetUrl.length -1];
 
-        let playerDown = false;
         let playerUp = false;
-
-        const player1 = document.getElementById('player1')
-        var player1Position = 0;
+        let playerDown = false;
+        let player1Position = 0;
+        const player1 = document.getElementById('player1');
 
 
         socket.on("connect", () => {
@@ -131,17 +130,15 @@
         }
 
         document.addEventListener('keydown', function(e) {
-            if(e.key == 'w') {
-                if(playerDown == false) {
-                    playerUp = true;
-                }
+            if(e.key === 'w') {
+                playerUp = true;
+                playerDown = false;
             }
-            if(e.key == 's') {
-                if(playerUp == false) {
-                    playerDown = true;
-                }
+            if(e.key === 's') {
+                playerDown = true;
+                playerUp = false;
             }
-        })
+        });
 
         document.addEventListener('keyup', function(e) {
             if(e.key === 'w') {
@@ -150,24 +147,25 @@
             if(e.key == 's') {
                 playerDown = false;
             }
-        })
+        });
 
-        while (playerUp) {
-            console.log("test");
-            if(playerUp == true) {
-                if(player1Position >= 0) {
-                    player1Position -= 8.43;
-                    player1.style.top = `${player1Position}%`;
-                    console.log("test");
-                }
+        function movePlayer() {
+            if (playerUp && player1Position >= 3) {
+                player1Position -= 2.1075;
+                player1.style.top = `${player1Position}%`;
             }
-            if(playerDown == true) {
-                if(player1Position <= 84.3) {
-                    player1Position += 8.43;
-                    player1.style.top = `${player1Position}%`;
-                }
+            if (playerDown && player1Position <= 84.3) {
+                player1Position += 2.1075;
+                player1.style.top = `${player1Position}%`;
             }
         }
+
+        function update() {
+            movePlayer();
+            requestAnimationFrame(update);
+        }
+
+        update();
     </script>
 </body>
 </html>
