@@ -227,6 +227,38 @@ io.on('connection', socket => {
         }
     })
 
+    socket.on("requestPlayerId", (socketID) => {
+        var spielerData = fs.readFileSync('spieler.json');
+        var newSpielerObject = JSON.parse(spielerData);
+
+        for (let i = 0; i < newSpielerObject.length; i++) {
+            if(newSpielerObject[i].name == socketID) {
+                socket.emit("getPlayerId", newSpielerObject[i].playerID);
+            }
+        }
+    })
+
+    socket.on("sendPlayerPosition", (code, player, position) => {
+        var spielerData = fs.readFileSync('spieler.json');
+        var newSpielerObject = JSON.parse(spielerData);
+
+        let partner = 1;
+
+        if(player == 1) {
+            partner = 2;
+        }
+
+        for(let i = 0; i < newSpielerObject.length; i++) {
+            if(newSpielerObject[i].game == code) {
+                console.log("test");
+                if(newSpielerObject[i].playerID == partner) {
+                    console.log("test2");
+                    socket.emit("getPlayerPosition", player, position);
+                }
+            }
+        }
+    })
+
     socket.on("disconnect", function()  {
         var spielerData = fs.readFileSync('spieler.json');
         var newSpielerObject = JSON.parse(spielerData);

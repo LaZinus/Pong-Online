@@ -111,12 +111,27 @@
 
         let playerUp = false;
         let playerDown = false;
-        let player1Position = 0;
-        const player1 = document.getElementById('player1');
+        let playerPosition = 0;
+        let player = null
+
+        let playerNumber = null;
 
 
         socket.on("connect", () => {
             socket.emit("playerJoined", param, socket.id)
+
+            socket.emit("requestPlayerId", socket.id);
+
+            socket.on("getPlayerId", (playerID) => {
+                if(playerID == 1) {
+                    player = document.getElementById('player1');
+                    playerNumber = playerID
+                } else if (playerID == 2) {
+                    player = document.getElementById('player2');
+                    playerNumber = playerID
+                }
+                console.log(playerID);
+            })
         })
 
         function copyLink() {
@@ -150,15 +165,27 @@
         });
 
         function movePlayer() {
-            if (playerUp && player1Position >= 3) {
-                player1Position -= 2.1075;
-                player1.style.top = `${player1Position}%`;
-            }
-            if (playerDown && player1Position <= 84.3) {
-                player1Position += 2.1075;
-                player1.style.top = `${player1Position}%`;
+            if(player != null) {
+                if (playerUp && playerPosition >= 3) {
+                    playerPosition -= 2.1075;
+                    player.style.top = `${playerPosition}%`;
+                    socket.emit("sendPlayerPosition", id, playerNumber, playerPosition);
+                }
+                if (playerDown && playerPosition <= 84.3) {
+                    playerPosition += 2.1075;
+                    player.style.top = `${playerPosition}%`;
+                    socket.emit("sendPlayerPosition", id, playerNumber, playerPosition);
+                }
             }
         }
+
+        socket.on("getPlayerPosition", (partner, position) => {
+            if(partner == 1) {
+                document.getElementById('player1').style.top = `${position}%`;
+            } else if(partner == 2) {
+                document.getElementById('player2').style.top = `${position}%`;
+            }
+        })
 
         function update() {
             movePlayer();
